@@ -12,7 +12,7 @@
 
     (S)  edge[bend left]  node {$http$} (A);
 \path[->]
-  (A) edge[bend left] node{$s://,s://$} (B);
+  (A) edge[bend left] node{$://,s://$} (B);
 \path[->]
 
     (B) edge[bend left] node {$period$} (C);
