@@ -1,0 +1,26 @@
+﻿\usetikzlibrary{automata,positioning}
+
+\begin{tikzpicture}[shorten >=1pt,node distance=2.5cm,on grid,auto]
+  % Define states
+  \node[state,initial] (S) {$S$};
+  \node[state] (A) [right=of S] {$A$};
+  \node[state] (B) [right=of A] {$B$};
+  \node[state] (C) [right=of B] {$C$};
+  \node [state, accepting] (D) [below=of C] {$D$};
+  % Transitions
+  \path[->]
+
+    (S)  edge[bend left]  node {$http$} (A);
+\path[->]
+  (A) edge[bend left] node{$s://,s://$} (B);
+\path[->]
+
+    (B) edge[bend left] node {$period$} (C);
+\path[->]
+
+	(B) edge[loop above] node {$a, b , c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9$} ();
+\path[->]
+
+	(C) edge[bend left] node {$com, edu, gov, mil, org, net$} (D);
+
+\end{tikzpicture}
