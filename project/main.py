@@ -22,7 +22,7 @@ class dfa:
 	def proccess(
 		self, inputs: str, location: state, path: list[tuple[str, str]], current: str
 	) -> tuple[bool, list[tuple[str, str]]]:
-		# if the input is empty return true and the path
+		# if the input is empty return true and the transitions
 		# base case
 		if inputs.__len__() == 0:
 			return (True, path)
@@ -50,6 +50,7 @@ def main() -> None:
 	# create states
 	S = state([("A", "http")])
 	A = state([("B", "s://"), ("B", "://")])
+	# this is ment to be easir to read the the next part
 	alphabetExceptPeriod: list[str] = [chr(i) for i in range(97, 123)] + [str(i) for i in range(10)]
 	alphabetExceptPeriodOld: list[str] = [
 		"a",
@@ -92,12 +93,14 @@ def main() -> None:
 	# I rewrote to make it easier to read but incase they are not equivelent we do this
 	if alphabetExceptPeriod != alphabetExceptPeriodOld:
 		alphabetExceptPeriod = alphabetExceptPeriodOld
+	# creates a state for everything in the alphabet execpt : and .
 	btransitions = [
 		(x, y)
 		for x, y in zip(
 			["B" for _ in range(36)],
 			alphabetExceptPeriod,
 		)
+		# append the transition to C
 	] + [("C", ".")]
 	B = state(
 		transitions=(btransitions),
@@ -109,6 +112,7 @@ def main() -> None:
 		{"S": S, "A": A, "B": B, "C": C, "D": D},
 		[*alphabetExceptPeriod, ".", ":"],
 	)
+	# run the machine and get input
 	x, y = accept(machine, input("Give string to proccess: "), S)
 	if x:
 		print("Accepted: " + str(y))
