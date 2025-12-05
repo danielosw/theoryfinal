@@ -19,7 +19,9 @@ class dfa:
 		self.symbols: list[str] = symbols
 
 	# proccess the string and return a tuple of if it succseded and if it did the path it took
-	def proccess(self, inputs: str, location: state, path: list[str]) -> tuple[bool, list[str]]:
+	def proccess(
+		self, inputs: str, location: state, path: list[tuple[str, str]], current: str
+	) -> tuple[bool, list[tuple[str, str]]]:
 		# if the input is empty return true and the path
 		# base case
 		if inputs.__len__() == 0:
@@ -28,15 +30,20 @@ class dfa:
 		transition = location.transitionlookup(inputs)
 		# if their is one
 		if transition:
-			# add the node we are going to, to the path
-			path.append(transition[0])
+			# add the node we are in, and what we consumed
+			path.append((current, transition[1]))
 			# recurse, cosuming what trasition needs from inputs and setting the location to our new node
 			return self.proccess(
-				inputs[transition[1].__len__() :], self.states[transition[0]], path
+				inputs[transition[1].__len__() :], self.states[transition[0]], path, transition[0]
 			)
 		else:
 			# if thier is not a valid trasistion then this is not in the language
 			return (False, [])
+
+
+# A is machine, w is string, S is the start state
+def accept(A: dfa, w: str, S: state) -> tuple[bool, list[tuple[str, str]]]:
+	return A.proccess(w, S, [], "S")
 
 
 def main() -> None:
@@ -82,6 +89,7 @@ def main() -> None:
 		"8",
 		"9",
 	]
+	# I rewrote to make it easier to read but incase they are not equivelent we do this
 	if alphabetExceptPeriod != alphabetExceptPeriodOld:
 		alphabetExceptPeriod = alphabetExceptPeriodOld
 	btransitions = [
@@ -96,11 +104,12 @@ def main() -> None:
 	)
 	C = state([("D", "com"), ("D", "edu"), ("D", "gov"), ("D", "mil"), ("D", "org"), ("D", "net")])
 	D = state([])
+	# load the states
 	machine = dfa(
 		{"S": S, "A": A, "B": B, "C": C, "D": D},
-		[*alphabetExceptPeriod, "."],
+		[*alphabetExceptPeriod, ".", ":"],
 	)
-	x, y = machine.proccess(input("Give string to proccess"), S, ["S"])
+	x, y = accept(machine, input("Give string to proccess: "), S)
 	if x:
 		print("Accepted: " + str(y))
 	else:
